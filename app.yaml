@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: zibiah
-        image: gcr.io/cit-262-group3
-/zibiah
+        image: gcr.io/cit-262-group3/zibiah
         ports:
         - containerPort: 80
         resources:
