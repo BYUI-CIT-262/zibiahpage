@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zibiah
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zibiah
+  template:
+    metadata:
+      labels:
+        app: zibiah
+    spec:
+      containers:
+      - name: zibiah
+        image: gcr.io/cit-262-group3/zibiah
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: ".5"
+            memory: "500Mi"
+          requests:
+            cpu: ".25"
+            memory: "250Mi"
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zibiah-service
+spec:
+  selector:
+    app: zibiah
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zibiah-loadbalancer
+spec:
+  selector:
+    app: zibiah
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
